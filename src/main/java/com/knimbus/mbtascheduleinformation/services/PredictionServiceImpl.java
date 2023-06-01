@@ -101,7 +101,7 @@ public class PredictionServiceImpl implements PredictionService {
             TrainInfoModel trainInfo = getTrainInfo(dataArray, now, arrayIndex, routesMap);
 
             // add the current train info to list only of there is still time for departure
-            if (trainInfo.getMinutesToDeparture() >= 0) trainInfos.add(trainInfo);
+            if (trainInfo != null && trainInfo.getMinutesToDeparture() >= 0) trainInfos.add(trainInfo);
             // if the list size is 10, then break the loop as we do not need to display more than 10 trains
             if (trainInfos.size() == 10) break;
         }
@@ -175,6 +175,10 @@ public class PredictionServiceImpl implements PredictionService {
         String arrivalTime = (String) attributes.get("arrival_time");
         String departureTime = (String) attributes.get("departure_time");
         Long directionId = (Long) attributes.get("direction_id");
+
+        if(departureTime == null) {
+            return null;
+        }
 
         long minutesToDeparture = computeMinutesToDeparture(now, arrivalTime, departureTime);
 
